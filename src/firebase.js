@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 
 let firebaseConfig = {
 	apiKey: "AIzaSyDTqJg97fDtDWe2RNK8V23sqb5ncUgCk7w",
@@ -10,27 +10,33 @@ let firebaseConfig = {
 	storageBucket: "tienda-fb8e3.appspot.com",
 	messagingSenderId: "1060707998782",
 	appId: "1:1060707998782:web:858cb61c650e331c2d456f",
-	measurementId: "G-4DNPCHDLH8"
+	measurementId: "G-4DNPCHDLH8",
 };
 
 firebase.initializeApp(firebaseConfig);
-let db = firebase.firestore().collection('favs');
+let db = firebase.firestore().collection("favs");
 
-export function getFavorites(uid){
-	return db.doc(uid).get().then(snap=>{
-		return snap.data().array;
-	})
+export function getFavorites(uid) {
+	return db
+		.doc(uid)
+		.get()
+		.then((snap) => {
+			return snap.data().array;
+		});
 }
 
-export function updateDB(array, uid){
-	return db.doc(uid).set({array});
+export function updateDB(array, uid) {
+	return db.doc(uid).set({ array });
 }
 
-export function signOutGoogle(){
+export function signOutGoogle() {
 	firebase.auth().signOut();
 }
 
-export function loginWithGoogle(){
+export function loginWithGoogle() {
 	let provider = new firebase.auth.GoogleAuthProvider();
-	return firebase.auth().signInWithPopup(provider).then(snap=>snap.user);
+	return firebase
+		.auth()
+		.signInWithPopup(provider)
+		.then((snap) => snap.user);
 }

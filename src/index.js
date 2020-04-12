@@ -5,8 +5,8 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import "font-awesome/css/font-awesome.css";
-import {Provider} from 'react-redux';
-import generateStore from './redux/store';
+import { Provider } from "react-redux";
+import generateStore from "./redux/store";
 
 let store = generateStore();
 
@@ -16,11 +16,11 @@ let WithRouter = () => (
 	</BrowserRouter>
 );
 
-let WithStore = ()=> (
+let WithStore = () => (
 	<Provider store={store}>
 		<WithRouter />
 	</Provider>
-)
+);
 
 ReactDOM.render(<WithStore />, document.getElementById("root"));
 

@@ -1,4 +1,4 @@
-import { loginWithGoogle, signOutGoogle } from '../firebase'
+import { loginWithGoogle, signOutGoogle } from "../firebase";
 // Constanst
 let initialData = {
 	loggedIn: false,
@@ -14,63 +14,64 @@ const LOG_OUT = "LOG_OUT";
 export default function reducer(state = initialData, action) {
 	switch (action.type) {
 		case LOGIN_SUCCESS:
-			return { ...state, fetching: false, ...action.payload, loggedIn: true }
+			return { ...state, fetching: false, ...action.payload, loggedIn: true };
 		case LOGIN_ERROR:
-			return { ...state, fetching: false, error: action.payload }
+			return { ...state, fetching: false, error: action.payload };
 		case LOGIN:
-			return { ...state, fetching: true }
+			return { ...state, fetching: true };
 		case LOG_OUT:
-			return { ...initialData }
+			return { ...initialData };
 		default:
 			return state;
 	}
 }
 
 //AUX
-function saveStorage(storage){
+function saveStorage(storage) {
 	localStorage.storage = JSON.stringify(storage);
 }
 
 // Actions (action creator)
-export let logOutAction=()=>(dispatch, getState)=>{
+export let logOutAction = () => (dispatch, getState) => {
 	signOutGoogle();
 	dispatch({
-		type: LOG_OUT
+		type: LOG_OUT,
 	});
-	localStorage.removeItem('storage');
-}
+	localStorage.removeItem("storage");
+};
 
-export let restoreSessionAction=()=>(dispatch, getState)=>{
+export let restoreSessionAction = () => (dispatch, getState) => {
 	let storage = localStorage.storage;
-	storage = storage?JSON.parse(storage):null;
-	if(storage && storage.user){
+	storage = storage ? JSON.parse(storage) : null;
+	if (storage && storage.user) {
 		dispatch({
 			type: LOGIN_SUCCESS,
-			payload: storage.user
+			payload: storage.user,
 		});
 	}
-}
-export let doGoogleLoginAction=()=>(dispatch, getState)=>{
+};
+export let doGoogleLoginAction = () => (dispatch, getState) => {
 	dispatch({
-		type: LOGIN
+		type: LOGIN,
 	});
 	return loginWithGoogle()
-		.then(user=>{
+		.then((user) => {
 			dispatch({
 				type: LOGIN_SUCCESS,
 				payload: {
 					uid: user.uid,
 					displayName: user.displayName,
 					email: user.email,
-					photoURL: user.photoURL
-				}
+					photoURL: user.photoURL,
+				},
 			});
 			saveStorage(getState());
-		}).catch(e=>{
+		})
+		.catch((e) => {
 			console.log(e);
 			dispatch({
 				type: LOGIN_ERROR,
-				payload: e.message
-			})
-	})
-}
+				payload: e.message,
+			});
+		});
+};
