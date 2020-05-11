@@ -85,6 +85,27 @@ export let addFavoritesAction = () => (dispatch, getState) => {
 		payload: { array: [...array], favorites: [...favorites] },
 	});
 };
+export let findJobsAction = (e)=> (dispatch, getState)=>{
+	let getAll = JSON.parse(localStorage.getItem('allData'))
+	const resArray = fetchArrayAction(e, getAll)();
+	console.log('total', resArray);
+	dispatch({
+		type: GET_JOB_SUCCESS,
+		payload: [...resArray],
+	})
+};
+
+export let fetchArrayAction =(search, jobs)=>(dispatch, getState)=>{
+	return jobs.filter(job => {
+		const regex = new RegExp(search, "gi");
+		const { title, company, cities= [{}]} = job;
+		//const { country } = cities&&cities[0]?cities[0]:[];
+		const { country= {} } = cities[0] || {};
+
+		return title.match(regex) || company.name.match(regex)
+			|| (country.name && country.name.match(regex));
+	});
+}
 export let removeCharacterAction = () => (dispatch, getState) => {
 	let { array } = getState().characters;
 	array.shift();
@@ -137,15 +158,14 @@ export let getCharactersAction = () => (dispatch, getState) => {
 			//variables:{ page: nextPage }
 		})
 		.then(({ data, error }) => {
-			console.log("res", data);
 			if (error) {
-				console.log("eeee", error);
 				dispatch({
 					type: GET_JOB_ERROR,
 					payload: error,
 				});
 				return;
 			}
+			localStorage.setItem('allData', JSON.stringify(data.jobs))
 			dispatch({
 				type: GET_JOB_SUCCESS,
 				payload: data.jobs,

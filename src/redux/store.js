@@ -21,6 +21,6 @@ export default function generateStore() {
 	console.log("store", store);
 	getCharactersAction()(store.dispatch, store.getState);
 	restoreSessionAction()(store.dispatch, store.getState);
-	retreiveFavsAction()(store.dispatch, store.getState);
+	//retreiveFavsAction()(store.dispatch, store.getState);
 	return store;
 }

@@ -2,15 +2,23 @@ import React from "react";
 import Card from "../card/Card";
 import { connect } from "react-redux";
 import {
-	removeCharacterAction,
-	addFavoritesAction,
+	findJobsAction
 } from "../../redux/charsDuck";
 import styles from "./home.module.css";
 
-function Home({ chars, removeCharacterAction, addFavoritesAction }) {
+function Home({ chars,otherArray, findJobsAction }) {
+	let hereDummy = otherArray;
 	function renderCharacter() {
-		//console.table('antes', chars)
-		chars.sort(function (a, b) {
+		return chars.map((char, idx)=>{
+			return <Card {...char} key={idx} />
+		});
+	}
+	function findAJob(e){
+		let letter = e.target.value;
+		findJobsAction(letter, hereDummy)
+	}
+	function orderByDate(){
+		chars.sort((a, b)=>{
 			if (a.postedAt < b.postedAt) {
 				return 1;
 			}
@@ -19,28 +27,17 @@ function Home({ chars, removeCharacterAction, addFavoritesAction }) {
 			}
 			return 0;
 		});
-		console.table(chars);
-		//let char = chars[0];
-		return chars.map((char, idx)=>{
-			return <Card {...char} key={idx} />
-		});
-	}
-
-	/*function nextCharacter() {
-		removeCharacterAction();
-	}*/
-	function addFav() {
-		addFavoritesAction();
 	}
 	return (
 		<div className={styles.container}>
 			<h2>Jobs</h2>
+			<form onSubmit={(e)=>e.preventDefault()}>
+				<input type="search" onChange={findAJob} />
+			</form>
 			<div>{renderCharacter()}</div>
 		</div>
 	);
 }
-
-//function mapStatetoProps(store){};
 
 function mapState(state) {
 	return {
@@ -48,6 +45,6 @@ function mapState(state) {
 	};
 }
 
-export default connect(mapState, { removeCharacterAction, addFavoritesAction })(
+export default connect(mapState, { findJobsAction })(
 	Home
 );
