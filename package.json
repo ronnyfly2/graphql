@@ -8,7 +8,7 @@
     "@testing-library/react": "^10.0.3",
     "@testing-library/user-event": "^10.0.2",
     "apollo-boost": "^0.4.7",
-    "firebase": "^7.14.1",
+    "firebase": "^10.9.0",
     "font-awesome": "^4.7.0",
     "graphql": "^15.0.0",
     "react": "^16.13.1",
